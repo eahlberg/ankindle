@@ -1,7 +1,14 @@
 #!/bin/sh
 
-filename="history.log"
+filename="monitor.log"
 maxsize=14500
+
+if [ ! -f "$filename" ]
+then
+  touch "$filename"
+else
+  :
+fi
 
 while true
 do
@@ -12,11 +19,11 @@ do
 
     if [ $filesize -ge $maxsize ]
     then
-      echo "[$(date)] Kindle connected, creating CSV file" > history.log
-      echo "[$(date)] CSV created. Waiting for disconnect..." > history.log
+      echo "[$(date)] Kindle connected, creating CSV file" > monitor.log
+      echo "[$(date)] CSV created. Waiting for disconnect..." > monitor.log
     else
-      echo "[$(date)] Kindle connected, creating CSV file" >> history.log
-      echo "[$(date)] CSV created. Waiting for disconnect..." >> history.log
+      echo "[$(date)] Kindle connected, creating CSV file" >> monitor.log
+      echo "[$(date)] CSV created. Waiting for disconnect..." >> monitor.log
     fi
 
     python create_csv.py
@@ -35,9 +42,9 @@ do
   else
     if [ $filesize -ge $maxsize ]
     then
-      echo "[$(date)] Kindle not connected" > history.log
+      echo "[$(date)] Kindle not connected" > monitor.log
     else
-      echo "[$(date)] Kindle not connected" >> history.log
+      echo "[$(date)] Kindle not connected" >> monitor.log
     fi
 
   fi
