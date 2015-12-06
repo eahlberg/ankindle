@@ -1,7 +1,6 @@
 import sqlite3
 from Word import *
 
-
 class DBHandler:
     def insert_into_local(self, local_db, word_info):
         insertions = 0
@@ -9,7 +8,7 @@ class DBHandler:
         conn = sqlite3.connect(local_db)
         c = conn.cursor()
         if not c.execute(('SELECT * FROM WORDS WHERE id = "%s"') % word_key).fetchone():
-            print 'Inserting word: %s into local table WORDS' % word
+            print '[DBHandler] Inserting word: %s into local table WORDS' % word
             q1 = ('INSERT INTO WORDS VALUES("%s", "%s", "%s", "%s", "%s")') % (word_key, word, stem, lang, timestamp)
             c.execute(q1)
             conn.commit()
@@ -37,7 +36,9 @@ class DBHandler:
     def fetch_new_words(self, kindle_db, local_db):
         kindle_words = self.fetch_all(kindle_db)
         local_words = self.fetch_all(local_db)
-        return [x for x in kindle_words if x not in local_words]
+        local_word_keys = map(lambda word: word[0], local_words)
+
+        return [x for x in kindle_words if x[0] not in local_word_keys]
 
     def fetch_and_insert_new_words(self, kindle_db, local_db):
         new_words = self.fetch_new_words(kindle_db, local_db)
@@ -49,7 +50,7 @@ class DBHandler:
         c = conn.cursor()
         # TODO: make this check a function
         if not c.execute(('SELECT * FROM TRANSLATIONS WHERE word_key = "%s"') % word_key).fetchone():
-            print ('Inserting %s with translation %s into local table TRANSLATIONS') % (word_key, translation)
+            print ('[DBHandler] Inserting %s with translation %s into local table TRANSLATIONS') % (word_key, translation)
             query = ('INSERT INTO TRANSLATIONS VALUES("%s", "%s")') % (word_key,
                                                                        translation)
             c.execute(query)
