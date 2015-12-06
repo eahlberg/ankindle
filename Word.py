@@ -11,9 +11,11 @@ class Word:
         self.translation = translation
 
     def __repr__(self):
-        return '%s, %s, %s, %s, %s, %s, %s' % (self.word_key, self.word, self.stem, self.lang,
-                                                  self.timestamp, self.usages, self.translation)
+        return '%s, %s, %s, %s, %s, %s, %s' % (self.word_key, self.word,
+                                               self.stem, self.lang,
+                                               self.timestamp, self.usages,
+                                               self.translation)
 
     def to_csv(self):
-        return ('%s\t%s ["%s"]\n' % (self.word.capitalize(),
-                                  self.translation, '/'.join(self.usages))).encode('utf-8')
+        return ('%s\t%s - %s\n' % (self.word.capitalize(), self.translation,
+                                     '/'.join(self.usages))).encode('utf-8')

@@ -8,21 +8,26 @@ from Word import *
 import CSVHandler
 import sys
 import argparse
+import os
+import ConfigParser
 
 def main():
     parser = argparse.ArgumentParser()
-    # TODO: possible local db name
-    parser.add_argument('csvfile', help='Name of CSV file to output')
-    parser.add_argument('kindledb', help='Path to Kindle SQL database')
-    parser.add_argument('apikey', help='Yandex API key')
+    parser.add_argument('configfile', help='Path to config file')
     args = parser.parse_args()
-    csvfile = args.csvfile
-    kindle_db = args.kindledb
-    api_key = args.apikey
+    configfile = args.configfile
 
-    local_db = 'words.db'
+    config = ConfigParser.ConfigParser()
+    config.read(configfile)
+    csvfile = str(config.get('Settings', 'csv_file'))
+    kindle_db = str(config.get('Settings', 'kindle_db'))
+    local_db = str(config.get('Settings', 'local_db'))
+    api_key = str(config.get('Settings', 'api_key'))
 
     db_handler = DBHandler.DBHandler()
+    if not os.path.isfile(local_db):
+        db_handler.init(local_db)
+
     translation_handler = TranslationHandler.TranslationHandler(api_key)
     word_handler = WordHandler.WordHandler()
     csv_handler = CSVHandler.CSVHandler()
