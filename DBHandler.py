@@ -1,4 +1,5 @@
 import sqlite3
+from Word import *
 
 
 class DBHandler:
@@ -59,3 +60,18 @@ class DBHandler:
         map(lambda (word_key, translation): self.insert_translation(local_db, word_key,
                                                  translation), words)
 
+    def fetch_all_with_translations(self, local_db):
+        word_infos = self.fetch_all(local_db)
+        conn = sqlite3.connect(local_db)
+        c = conn.cursor()
+
+        words = []
+        for (word_key, word, stem, lang, timestamp, lookups) in word_infos:
+            query = ('SELECT translation FROM TRANSLATIONS WHERE word_key = "%s"') % word_key
+            translation = c.execute(query).fetchone()
+# TODO: temp. fix: uses 0 to exctract only the transl., not whole tuple
+            lookups_str = map(lambda lookup: lookup[1], lookups)
+            words.append(Word(word_key, word, stem, lang, timestamp, lookups_str,
+                              translation[0]))
+        conn.close()
+        return words
