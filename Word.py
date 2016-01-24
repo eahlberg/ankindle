@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 class Word:
     def __init__(self, word_key, word, stem, lang, timestamp, usages, translation):
         self.word_key = word_key

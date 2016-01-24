@@ -69,7 +69,7 @@ class DBHandler:
         for (word_key, word, stem, lang, timestamp, lookups) in word_infos:
             query = ('SELECT translation FROM TRANSLATIONS WHERE word_key = "%s"') % word_key
             translation = c.execute(query).fetchone()
-# TODO: temp. fix: uses 0 to exctract only the transl., not whole tuple
+# TODO: temp. fix: uses 0 to extract only the transl., not whole tuple
             lookups_str = map(lambda lookup: lookup[1], lookups)
             words.append(Word(word_key, word, stem, lang, timestamp, lookups_str,
                               translation[0]))

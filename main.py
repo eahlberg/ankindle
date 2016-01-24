@@ -37,6 +37,8 @@ def main():
 
     words = find_words_as_objects(local_db, db_handler)
     csv_handler.create_csv(csvfile, words)
+    print '[main] Updated local database: %s and wrote csv to: %s' % (local_db,
+                                                                csvfile)
 
 def update_local_db(kindle_db, local_db, db_handler, word_handler, translation_handler):
     word_info = db_handler.fetch_and_insert_new_words(kindle_db, local_db)
